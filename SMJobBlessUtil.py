@@ -150,16 +150,33 @@ def readPlistFromToolSection(toolPath, segmentName, sectionName):
     if len(plistLines) < 3 or plistLines[1] != ("Contents of (%s,%s) section" % (segmentName, sectionName)):
         raise CheckException("tool %s / %s section dump malformed (1)" % (segmentName, sectionName), toolPath)
     del plistLines[0:2]
-
+    # Reshapes an input like "6d783f3c" into an output like "3c 3f 78 6d"
+    def reshape(input):
+        hexit_pairs = [input[i:i+2] for i in range(0, len(input), 2)]
+        hexit_pairs.reverse()
+        return " ".join(hexit_pairs)
+    
     try:
         bytes = []
         for line in plistLines:
-            # line looks like this:
+            # line should look like this:
             #
-            # '0000000100000b80\t3c 3f 78 6d 6c 20 76 65 72 73 69 6f 6e 3d 22 31 '
+            # But it actually looks like:
+            # '0000000100003b5a\t6d783f3c 6576206c 6f697372 31223d6e
             columns = line.split("\t")
             assert len(columns) == 2
-            for hexStr in columns[1].split():
+
+            hex_data = columns[1]
+            four_byte_chunks = hex_data.split()
+            # print("four_byte_chunks" + str(four_byte_chunks))
+
+            reshaped = [reshape(four_byte_chunk) for four_byte_chunk in four_byte_chunks]
+            # print("reshaped" + str(reshaped))
+
+            fixed_line = " ".join(reshaped)
+            # print("fixed_line: '" + str(fixed_line) + "'")
+
+            for hexStr in fixed_line.split():
                 bytes.append(int(hexStr, 16))
         plist = plistlib.readPlistFromString(bytearray(bytes))
     except:
