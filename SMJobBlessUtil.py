@@ -1,4 +1,4 @@
-#! /usr/bin/python 
+#! /Library/Frameworks/Python.framework/Versions/2.7/bin/python
 # 
 #   File:       SMJobBlessUtil.py
 # 
@@ -357,7 +357,9 @@ def setreq(appPath, appInfoPlistPath, toolInfoPlistPaths):
         bundleID = toolInfo["CFBundleIdentifier"]
         if not isinstance(bundleID, basestring):
             raise CheckException("'CFBundleIdentifier' must be a string", toolInfoPlistPath)
-        appToolDict[bundleID] = toolNameToReqMap[bundleID]
+        print(appToolDict)
+        # print(toolNameToReqMap)
+        appToolDict[bundleID] = toolNameToReqMap[bundleID]        
 
     # Set the SMPrivilegedExecutables value in the app "Info.plist".
 

@@ -67,7 +67,7 @@ Copyright (C) 2013 Apple Inc. All Rights Reserved.
         self->_authRef = NULL;
     }
     
-	if (![self blessHelperWithLabel:@"com.apple.bsd.SMJobBlessHelper" error:&error]) {
+	if (![self blessHelperWithLabel:@"com.karim.bsd.SMJobBlessHelper" error:&error]) {
 		NSLog(@"Something went wrong! %@ / %d", [error domain], (int) [error code]);
 	} else {
 		/* At this point, the job is available. However, this is a very
